@@ -1,19 +1,28 @@
-import './App.css';
+import React,{useState} from "react";
+import {v4 as uuid} from "uuid";
 import Header from "./Header";
+import AddContact from './AddContact';
+import ContactList from './ContactList';
 
 function App() {
-  return (
-    /**
-     * - El elemento de la linea siguiente se llama 'fragmento'.
-     * - Este tipo de funcion solo permite que sus componentes tengan un solo
-     * elemento padre, de lo contrario da error y pide que se ponga todo
-     * codigo en un fragment, definido anteriormente.
-     * - Esto es debido a que asi funciona un elemento JSX(JavaScript Extension).
-     * - Pueden usarse tambien arrow functions para los JSX.
-     */
-    <>
+  const [contacts,setContacts]=useState([]);
+  const addContactHandler=(contact)=>{
+    setContacts([...contacts,{id:uuid(),...contact}]);
+  }
+
+  const removeContactHandler=(id)=>{
+      const newContactList=contacts.filter((contact)=>{
+          return contact.id!==id;
+      });
+      setContacts(newContactList);
+  }
+
+  return(
+    <div className="ui container">
       <Header></Header>
-    </>
+      <AddContact addContactHandler={addContactHandler}></AddContact>
+      <ContactList contacts={contacts} removeContact={removeContactHandler}></ContactList>
+    </div>
   );
 }
 
